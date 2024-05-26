@@ -9,8 +9,6 @@ import (
 	"github.com/ChikaKakazu/go-cli-switchbot/config"
 )
 
-const BaseURL string = "https://api.switch-bot.com/v1.1"
-
 type Device struct {
 	DeviceId           string `json:"deviceId"`
 	DeviceName         string `json:"deviceName"`

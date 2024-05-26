@@ -11,15 +11,16 @@ import (
 	"github.com/ChikaKakazu/go-cli-switchbot/helper"
 )
 
-type Bot struct {
+type Humidifier struct {
 	DeviceId         string `json:"deviceId"`
 	DeviceName       string `json:"deviceName"`
 	DeviceSelectName string
 }
 
-// 選択したbotのデバイスをオフにする
-func (b *Bot) TurnOff(sighReq *config.SignRequest) ([]byte, error) {
-	url := helper.CommandUrl(b.DeviceId)
+// 選択したHumidifierのデバイスをオフにする
+func (h *Humidifier) TurnOff(sighReq *config.SignRequest) ([]byte, error) {
+	url := helper.CommandUrl(h.DeviceId)
+	// fmt.Println(url)
 	body := map[string]string{
 		"command":     "turnOff",
 		"parameter":   "default",
@@ -65,9 +66,9 @@ func (b *Bot) TurnOff(sighReq *config.SignRequest) ([]byte, error) {
 	return resJson, nil
 }
 
-// 選択したbotのデバイスをオンにする
-func (b *Bot) TurnOn(sighReq *config.SignRequest) ([]byte, error) {
-	url := helper.CommandUrl(b.DeviceId)
+// 選択したHumidifierのデバイスをオンにする
+func (h *Humidifier) TurnOn(sighReq *config.SignRequest) ([]byte, error) {
+	url := helper.CommandUrl(h.DeviceId)
 	body := map[string]string{
 		"command":     "turnOn",
 		"parameter":   "default",
