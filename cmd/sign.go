@@ -13,8 +13,8 @@ import (
 // signCmd represents the sign command
 var signCmd = &cobra.Command{
 	Use:   "sign",
-	Short: "A brief description of your command",
-	Long:  ``,
+	Short: "Generate a signature for SwitchBot API requests",
+	Long:  `Generate a HMAC-SHA256 signature using the SwitchBot API token and secret.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		sign()
 	},

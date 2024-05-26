@@ -13,8 +13,8 @@ import (
 // tokenCmd represents the token command
 var tokenCmd = &cobra.Command{
 	Use:   "token [set|get]",
-	Short: "A brief description of your command",
-	Long:  ``,
+	Short: "Manage SwitchBot API token and secret",
+	Long:  `Set or get the SwitchBot API token and secret used for authenticating requests`,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := config.NewConfig()
 		switch args[0] {
