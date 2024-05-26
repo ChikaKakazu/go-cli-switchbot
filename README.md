@@ -10,6 +10,8 @@ SwitchBotを操作するCLIです。
     - [devices](#devices)
 - [Control Bot](#control-bot)
     - [bot](#bot)
+- [Control Humidifier](#control-humidifier)
+    - [humidifier](#humidifier)
 
 ## Authentication
 SwitchBotApiを操作するには、TokenとSecretKeyが必要です。
@@ -105,7 +107,7 @@ Nonce:  79d5be9-659f-43b-915-0c881eda815
 SwitchBot ボットの操作を行います。具体的にはスイッチのオン・オフを行います。
 
 ### bot
-- `bot`コマンドで自身が利用しているボットの一覧を表示します。その後一覧の中から操作したいボットを選んでください
+- `bot`コマンドで自身が利用しているボットの一覧を表示します。その中から操作したいボットを選んでください
     ```sh
     ./go-cli-switchbot bot
     Use the arrow keys to navigate: ↓ ↑ → ← 
@@ -121,3 +123,23 @@ SwitchBot ボットの操作を行います。具体的にはスイッチのオ�
     ▸ Turn off
       Turn on
     ```
+
+## Control Humidifier
+SwitchBot 加湿器の操作を行います。具体的にはスイッチのオン・オフを行います。
+
+### humidifier
+- `humidifier`コマンドで自身が利用している加湿器の一覧を表示します。その中から操作したい加湿器を選んでください
+  ```sh
+  ./go-cli-switchbot humidifier
+  Use the arrow keys to navigate: ↓ ↑ → ← 
+  ? Select Humidifier: 
+    ▸ 943C6885FE: 加湿器 
+  ```
+- 選んだ加湿器に対してオン・オフを実行するコマンドが表示されるので選んでください
+  ```sh
+  ✔ 943C6885FE: 加湿器 
+  Use the arrow keys to navigate: ↓ ↑ → ← 
+  ? Select Action: 
+    ▸ Turn on
+      Turn off
+  ```
