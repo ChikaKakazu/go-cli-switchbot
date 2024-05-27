@@ -12,6 +12,9 @@ SwitchBotを操作するCLIです。
     - [bot](#bot)
 - [Control Humidifier](#control-humidifier)
     - [humidifier](#humidifier)
+- [Execute Scene](#execute-scene)
+    - [scene list](#scene-list)
+    - [scene exec](#scene-exec)
 
 ## Authentication
 SwitchBotApiを操作するには、TokenとSecretKeyが必要です。
@@ -143,3 +146,38 @@ SwitchBot 加湿器の操作を行います。具体的にはスイッチのオ�
     ▸ Turn on
       Turn off
   ```
+
+## Execute Scene
+シーンの一覧表示と実行を行います。登録してあるシーンの中から選択したシーンを実行します。
+
+### scene list
+- `scene list`コマンドで自身が登録してあるシーンの一覧を表示します。
+```sh
+./go-cli-switchbot scene list
+{
+  "body": [
+    {
+      "SceneSelectName": "",
+      "sceneId": "ce8b607-aa60-4631-a30-408cfcf1985",
+      "sceneName": "電気とエアコンをつける"
+    },
+    {
+      "SceneSelectName": "",
+      "sceneId": "283e9a6-1d68-450b-bb3-e7cdedd2a02",
+      "sceneName": "電気とエアコンを消す"
+    }
+  ],
+  "message": "success",
+  "statusCode": 100
+}
+```
+
+### scene exec
+- `scene exec`コマンドで登録してあるシーンの中から実行したいシーンを選択し、実行します。
+```sh
+./go-cli-switchbot scene exec
+Use the arrow keys to navigate: ↓ ↑ → ← 
+? Select Scene: 
+  ▸ "ce8b607-aa60-4631-a30-408cfcf1985: 電気とエアコンをつける
+    283e9a6-1d68-450b-bb3-e7cdedd2a02: 電気とエアコンを消す
+```
