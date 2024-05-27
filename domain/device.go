@@ -70,7 +70,6 @@ func GetDeviceList() (*DeviceList, *config.SignRequest) {
 		return nil, nil
 	}
 
-	// var result map[Device]interface{}
 	var result DeviceList
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {

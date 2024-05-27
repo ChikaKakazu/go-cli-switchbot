@@ -8,3 +8,5 @@ RUN mkdir /go/app
 COPY . /go/app
 
 WORKDIR /go/app
+
+RUN go install github.com/spf13/cobra-cli@latest
