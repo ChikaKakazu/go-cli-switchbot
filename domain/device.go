@@ -82,5 +82,9 @@ func GetDeviceList() (*DeviceList, *config.SignRequest) {
 
 func GetDevices() ([]Device, *config.SignRequest) {
 	deviceList, req := GetDeviceList()
+	if deviceList == nil {
+		return nil, nil
+	}
+
 	return deviceList.Body.DeviceList, req
 }

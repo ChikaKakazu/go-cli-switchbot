@@ -38,7 +38,7 @@ func init() {
 // bot(物理ボタン)の処理を行う
 func bot() {
 	// デバイスの一覧からbotのデバイスを取得する
-	devices, sighReq := domain.GetDevices()
+	devices, signReq := domain.GetDevices()
 	if len(devices) == 0 {
 		return
 	}
@@ -104,9 +104,9 @@ func bot() {
 
 	var resp []byte
 	if action == "Turn off" {
-		resp, _ = bot.TurnOff(sighReq)
+		resp, _ = bot.TurnOff(signReq)
 	} else {
-		resp, _ = bot.TurnOn(sighReq)
+		resp, _ = bot.TurnOn(signReq)
 	}
 
 	// 処理結果を表示する

@@ -6,26 +6,30 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"time"
 
-	"github.com/ChikaKakazu/go-cli-switchbot/config"
-	"github.com/ChikaKakazu/go-cli-switchbot/helper"
+	"github.com/ChikaKakazu/go-cli-switchbot/domain"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
 // sceneCmd represents the scene command
 var sceneCmd = &cobra.Command{
-	Use:   "scene",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "scene [list|exec]",
+	Short: "Interact with Scene devices. You can `list` scenes or `exec` a scene.",
+	Long:  `Interact with Scene devices. You can list scenes or execute a scene.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		scene()
+		if len(args) == 0 {
+			fmt.Println("Please specify 'scene list' or 'scene exec'")
+			return
+		}
+		switch args[0] {
+		case "list":
+			sceneList()
+		case "exec":
+			scene()
+		default:
+			fmt.Println("Invalid argument. Please specify 'scene list' or 'scene exec'")
+		}
 	},
 }
 
@@ -44,51 +48,65 @@ func init() {
 }
 
 func scene() {
-	config := config.NewConfig()
-	config, err := config.GetConfig()
+	scenes, signReq := domain.GetScenes()
+	if len(scenes) == 0 {
+		return
+	}
+
+	// scene.SceneSelectNameを書き換える
+	var selectScenes []domain.Scene
+	for _, scene := range scenes {
+		scene.SceneSelectName = fmt.Sprintf("%s: %s", scene.SceneId, scene.SceneName)
+		selectScenes = append(selectScenes, scene)
+	}
+
+	if len(selectScenes) == 0 {
+		fmt.Println("No scenes found")
+		return
+	}
+
+	var items []string
+	for _, scene := range selectScenes {
+		items = append(items, scene.SceneSelectName)
+	}
+
+	// sceneの一覧を表示する
+	prompt := promptui.Select{
+		Label: "Select Scene",
+		Items: items,
+	}
+
+	_, result, err := prompt.Run()
 	if err != nil {
-		fmt.Println("Failed to get token or secret: ", err)
+		fmt.Println("Prompt failed: ", err)
 		return
 	}
 
-	if config.Token == "" || config.Secret == "" {
-		fmt.Println("Token or Secret is not set. Please set them first.")
+	var scene *domain.Scene
+	for _, s := range selectScenes {
+		if s.SceneSelectName == result {
+			scene = &s
+			break
+		}
+	}
+
+	if scene == nil {
+		fmt.Println("Failed to get scene")
 		return
 	}
 
-	// 署名を生成する
-	sighReq, err := config.GenerateSignature()
-	if err != nil {
-		fmt.Println("Failed to generate signature: ", err)
-		return
-	}
+	// 選択されたsceneを実行する
+	resp, _ := scene.ExecScene(signReq)
 
-	client := &http.Client{Timeout: 10 * time.Second}
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/scenes", helper.BaseURL), nil)
-	if err != nil {
-		fmt.Println("Failed to create request: ", err)
-		return
-	}
+	fmt.Println(string(resp))
+}
 
-	req.Header.Set("Authorization", sighReq.Token)
-	req.Header.Set("sign", sighReq.Signature)
-	req.Header.Set("t", sighReq.Time)
-	req.Header.Set("nonce", sighReq.Nonce)
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Failed to send request: ", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		fmt.Println("Failed to get devices: ", resp.Status)
-		return
-	}
+func sceneList() {
+	sceneList, _ := domain.GetSceneList()
 
 	var result map[string]interface{}
-	err = json.NewDecoder(resp.Body).Decode(&result)
+	byteSceneList, _ := json.Marshal(sceneList)
+	err := json.Unmarshal(byteSceneList, &result)
 	if err != nil {
 		fmt.Println("Failed to decode response: ", err)
 		return

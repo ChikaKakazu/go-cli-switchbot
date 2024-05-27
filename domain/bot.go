@@ -18,7 +18,7 @@ type Bot struct {
 }
 
 // 選択したbotのデバイスをオフにする
-func (b *Bot) TurnOff(sighReq *config.SignRequest) ([]byte, error) {
+func (b *Bot) TurnOff(signReq *config.SignRequest) ([]byte, error) {
 	url := helper.CommandUrl(b.DeviceId)
 	body := map[string]string{
 		"command":     "turnOff",
@@ -36,10 +36,10 @@ func (b *Bot) TurnOff(sighReq *config.SignRequest) ([]byte, error) {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("Authorization", sighReq.Token)
-	req.Header.Set("sign", sighReq.Signature)
-	req.Header.Set("t", sighReq.Time)
-	req.Header.Set("nonce", sighReq.Nonce)
+	req.Header.Set("Authorization", signReq.Token)
+	req.Header.Set("sign", signReq.Signature)
+	req.Header.Set("t", signReq.Time)
+	req.Header.Set("nonce", signReq.Nonce)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -66,7 +66,7 @@ func (b *Bot) TurnOff(sighReq *config.SignRequest) ([]byte, error) {
 }
 
 // 選択したbotのデバイスをオンにする
-func (b *Bot) TurnOn(sighReq *config.SignRequest) ([]byte, error) {
+func (b *Bot) TurnOn(signReq *config.SignRequest) ([]byte, error) {
 	url := helper.CommandUrl(b.DeviceId)
 	body := map[string]string{
 		"command":     "turnOn",
@@ -84,10 +84,10 @@ func (b *Bot) TurnOn(sighReq *config.SignRequest) ([]byte, error) {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("Authorization", sighReq.Token)
-	req.Header.Set("sign", sighReq.Signature)
-	req.Header.Set("t", sighReq.Time)
-	req.Header.Set("nonce", sighReq.Nonce)
+	req.Header.Set("Authorization", signReq.Token)
+	req.Header.Set("sign", signReq.Signature)
+	req.Header.Set("t", signReq.Time)
+	req.Header.Set("nonce", signReq.Nonce)
 
 	resp, err := client.Do(req)
 	if err != nil {
