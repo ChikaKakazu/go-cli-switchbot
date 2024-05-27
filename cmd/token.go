@@ -13,9 +13,13 @@ import (
 // tokenCmd represents the token command
 var tokenCmd = &cobra.Command{
 	Use:   "token [set|get]",
-	Short: "Manage SwitchBot API token and secret",
+	Short: "`set` or `get` the SwitchBot API token and secret used for authenticating requests",
 	Long:  `Set or get the SwitchBot API token and secret used for authenticating requests`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println("Please specify 'token set' or 'token get'.")
+			return
+		}
 		config := config.NewConfig()
 		switch args[0] {
 		case "set":
@@ -23,7 +27,7 @@ var tokenCmd = &cobra.Command{
 		case "get":
 			get(config)
 		default:
-			fmt.Println("Invalid argument. Please specify 'set' or 'get'.")
+			fmt.Println("Invalid argument. Please specify 'token set' or 'token get'.")
 		}
 	},
 }
