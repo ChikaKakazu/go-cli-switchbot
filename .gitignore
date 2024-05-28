@@ -25,3 +25,6 @@ config.json
 
 # build file
 go-cli-switchbot
+
+# GoReleaser build folder
+dist/
