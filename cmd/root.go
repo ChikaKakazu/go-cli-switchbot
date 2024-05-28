@@ -12,7 +12,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "go-cli-switchbot",
-	Version: "0.1.0",
+	Version: "0.3.0",
 	Short:   "CLI tool to operate SwitchBot",
 	Long:    `CLI tool to operate SwitchBot. It can be used to control SwitchBot devices like Bot, Meter, Hub, etc.`,
 	// Uncomment the following line if your bare application
