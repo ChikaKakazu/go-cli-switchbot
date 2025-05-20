@@ -11,6 +11,7 @@ import (
 	"github.com/ChikaKakazu/go-cli-switchbot/helper"
 )
 
+// Bot SwitchBotデバイスの情報を保持する構造体
 type Bot struct {
 	DeviceId         string `json:"deviceId"`
 	DeviceName       string `json:"deviceName"`
