@@ -13,14 +13,17 @@ import (
 
 // Bot SwitchBotデバイスの情報を保持する構造体
 type Bot struct {
-	DeviceId         string `json:"deviceId"`
-	DeviceName       string `json:"deviceName"`
-	DeviceSelectName string
+	DeviceId         string `json:"deviceId"`   // デバイスの一意の識別子
+	DeviceName       string `json:"deviceName"` // デバイスの表示名
+	DeviceSelectName string // CLIでのデバイス選択時に使用する名前
 }
 
-// 選択したbotのデバイスをオフにする
+// TurnOff 選択したSwitchBotデバイスをオフにする
+// 戻り値: APIレスポンスのJSONバイトとエラー情報
 func (b *Bot) TurnOff(signReq *config.SignRequest) ([]byte, error) {
 	url := helper.CommandUrl(b.DeviceId)
+
+	// コマンドのペイロードを準備
 	body := map[string]string{
 		"command":     "turnOff",
 		"parameter":   "default",
@@ -31,12 +34,14 @@ func (b *Bot) TurnOff(signReq *config.SignRequest) ([]byte, error) {
 		return nil, fmt.Errorf("failed to encode body: %w", err)
 	}
 
+	// タイムアウト付きのHTTPクライアントを作成
 	client := &http.Client{Timeout: 10 * time.Second}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
+	// 認証に必要なヘッダーを設定
 	req.Header.Set("Authorization", signReq.Token)
 	req.Header.Set("sign", signReq.Signature)
 	req.Header.Set("t", signReq.Time)
@@ -52,6 +57,7 @@ func (b *Bot) TurnOff(signReq *config.SignRequest) ([]byte, error) {
 		return nil, fmt.Errorf("failed to turn off device: %s", resp.Status)
 	}
 
+	// レスポンスを解析して整形
 	var result map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
@@ -66,9 +72,12 @@ func (b *Bot) TurnOff(signReq *config.SignRequest) ([]byte, error) {
 	return resJson, nil
 }
 
-// 選択したbotのデバイスをオンにする
+// TurnOn 選択したSwitchBotデバイスをオンにする
+// 戻り値: APIレスポンスのJSONバイトとエラー情報
 func (b *Bot) TurnOn(signReq *config.SignRequest) ([]byte, error) {
 	url := helper.CommandUrl(b.DeviceId)
+
+	// コマンドのペイロードを準備
 	body := map[string]string{
 		"command":     "turnOn",
 		"parameter":   "default",
@@ -79,12 +88,14 @@ func (b *Bot) TurnOn(signReq *config.SignRequest) ([]byte, error) {
 		return nil, fmt.Errorf("failed to encode body: %w", err)
 	}
 
+	// タイムアウト付きのHTTPクライアントを作成
 	client := &http.Client{Timeout: 10 * time.Second}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
+	// 認証に必要なヘッダーを設定
 	req.Header.Set("Authorization", signReq.Token)
 	req.Header.Set("sign", signReq.Signature)
 	req.Header.Set("t", signReq.Time)
@@ -100,6 +111,7 @@ func (b *Bot) TurnOn(signReq *config.SignRequest) ([]byte, error) {
 		return nil, fmt.Errorf("failed to turn off device: %s", resp.Status)
 	}
 
+	// レスポンスを解析して整形
 	var result map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
